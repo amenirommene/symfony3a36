@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Author;
+use App\Form\AuthorType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -68,5 +70,40 @@ class AuthorController extends AbstractController
         $em->flush();
 
         return new Response("Success");
+    }
+
+    #[Route('/author/all', name: 'app_author_all')]
+    public function getAll(ManagerRegistry $doctrine): Response
+    {
+        $repo=$doctrine->getRepository(Author::class);
+        $authors=$repo->findAll();
+        return $this->render('author/list.html.twig', ['list'=> $authors]);
+
+
+    }
+
+    #[Route('/author/addF', name: 'app_author_addF')]
+    public function addAuthorF(Request $req, ManagerRegistry $doctrine): Response
+    {
+        $a=new Author(); //notre objet est vide
+        
+        //instancier le formulaire
+        $form=$this->createForm(AuthorType::class,$a);
+        //récupérer les données
+        /* $a->setUsername($req->get('username'));
+        $a->setEmail($req->get('email'));*/
+        $form->handleRequest($req);
+        //si on a cliqué sur le bouton submit
+        if ($form->isSubmitted()){
+        $em=$doctrine->getManager();
+        //3- préparer la requête d'ajout
+        $em->persist($a);
+        //4- exécuter la requête
+        $em->flush();
+        return $this->redirectToRoute("app_author_all");
+        }
+        //renvoyer le form vers la vue
+      //  return $this->render("author/add.html.twig", ["myForm"=>$form->createView()]);
+        return $this->renderForm("author/add.html.twig", ["myForm"=>$form]);
     }
 }
