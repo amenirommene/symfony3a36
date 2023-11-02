@@ -24,17 +24,21 @@ class BookRepository extends ServiceEntityRepository
 //    /**
 //     * @return Book[] Returns an array of Book objects
 //     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('b.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+   public function findBookByTitle($value, $value2): array
+   {
+       return $this->createQueryBuilder('b')
+       ->join('b.author','x')
+       ->addSelect('x')
+       ->where('x.username = :name')
+        ->andWhere('b.title = :val')
+           ->setParameter('val', $value)
+           ->setParameter('name', $value2)
+           ->orderBy('b.ref', 'ASC')
+           ->setMaxResults(10)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
 
 //    public function findOneBySomeField($value): ?Book
 //    {

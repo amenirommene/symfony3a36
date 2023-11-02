@@ -28,6 +28,8 @@ class Book
     #[ORM\ManyToOne(inversedBy: 'books')]
     private ?Author $author = null;
 
+    
+
    
 
     public function getTitle(): ?string
@@ -115,4 +117,6 @@ class Book
 
         return $this;
     }
+
+    
 }

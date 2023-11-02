@@ -1,0 +1,11 @@
+<ul>
+{% for b in list %}
+<li>{{b.ref}} - {{b.author.username}} - {{b.published}}</li>
+{% endfor %}
+</ul>
+{% if nb1 is defined %}
+Le nombre de livres publiés : {{nb1}} <br>
+{% endif %}
+{% if nb2 is defined %}
+Le nombre de livres publiés : {{nb2}}
+{% endif %}
